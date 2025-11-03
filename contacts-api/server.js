@@ -1,24 +1,42 @@
-// server.js
-require('dotenv').config(); // Load environment variables
-const express = require('express');
-const cors = require('cors');
-const connectDB = require('./config/db');
-const contactRoutes = require('./routes/contacts');
-
+/* ******************************************
+* This server.js file is the primary file of the
+* application. It is used to control the project.
+*******************************************/
+/* ***********************
+* Require Statements
+*************************/
+const express = require("express");
+const expressLayouts = require("express-ejs-layouts");
+const env = require("dotenv").config();
 const app = express();
-const PORT = process.env.PORT || 8080;
+const static = require("./routes/static");
 
-// Middleware
-app.use(cors());
-app.use(express.json());
+/* ***********************
+* View Engine and Templates
+*************************/
+app.set("view engine", "ejs");
+app.use(expressLayouts);
+app.set("layout", "./layouts/layout"); // not at views root
 
-// Database connection
-connectDB();
+/* ***********************
+* Routes
+*************************/
+app.use(static);
 
-// Routes
-app.use('/api/contacts', contactRoutes);
+app.use("/", (req, res) => {
+res.render("index", { title: "Home" });
+});
 
-// Start the server
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+/* ***********************
+* Local Server Information
+* Values from .env (environment) file
+*************************/
+const port = process.env.PORT;
+const host = process.env.HOST;
+
+/* ***********************
+* Log statement to confirm server operation
+*************************/
+app.listen(port, () => {
+console.log(`app listening on ${host}:${port}`);
 });
