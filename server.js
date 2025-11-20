@@ -7,16 +7,13 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Middleware
 app.use(express.json());
-
-// Use routes
 app.use('/', require('./routes'));
 
-// Connect to DB and start server
 const start = async () => {
   try {
-    await connectDB(process.env.MONGO_URI);
+    console.log("DEBUG: MONGODB_URI =", process.env.MONGODB_URI);
+    await connectDB();
     app.listen(port, () => console.log(`Server running on port ${port}`));
   } catch (err) {
     console.error(err);
